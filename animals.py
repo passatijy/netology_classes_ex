@@ -59,31 +59,33 @@ list_animals = [
 
 
 class Animals:
-	def __init__(self, name, legs = 4, weight = 1, voice, hungry)
-	self.name = ''
-	self.voice = ''
-	hungry = True
-	classname = ''
+	def __init__(self, name, voice, hungry, legs = 4, weight = 1 ):
+		self.name = name
+		self.voice = voice
+		self.hungry = hungry
+		self.classname = ''
 
 	def feed(self):
 		self.hungry = False
 
 
 class Milking(Animals):
-	milk = 5
-	resourse_name = 'молоко'
+	def __init__(self):
+	self.milk = 5
+	self.resourse_name = 'молоко'
 	def get_milk(self, value = 1):
 		if value < self.milk :
 			self.milk = self.milk - value
 		return [self.milk, value]
 
 class Cows(Milking):
-	classname = 'cow'
-	voice = 'муууу'
+	self.classname = 'cow'
+	self.voice = 'муууу'
 	
 class Goats(Milking):
-	classname = 'goat'
-	voice = 'беее'
+	self.classname = 'goat'
+	self.voice = 'беее'
+
 	
 class Sheep(Animals):
 	classname = 'sheep'
@@ -110,7 +112,7 @@ class Gooses(Birds):
 	pass
 
 
-anim1 = Cows()
+anim1 = Cows('Милка','мууу',True)
 
 print('Животное 1: ', anim1.classname, '  Оно может давать ', anim1.resource_name, 'было ', anim1.get_milk(3)[0], ' осталось ', anim1.get_milk(5)[1])
 
