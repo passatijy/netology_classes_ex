@@ -1,48 +1,3 @@
-'''
-Вы приехали помогать на ферму Дядюшки Джо и видите вокруг себя множество разных животных:
-attributes:
-	types
-		voice
-	names
-	weight
-
-interfaces:
-	all
-		feed
-	cow, goat
-		milk
-	sheep
-		cut
-	chicken, duck, goose
-		egg
-
-гусей "Серый" и "Белый"
-корову "Маньку"
-овец "Барашек" и "Кудрявый"
-кур "Ко-Ко" и "Кукареку"
-коз "Рога" и "Копыта"
-и утку "Кряква"
-Со всеми животными вам необходимо как-то взаимодействовать:
-
-кормить
-корову и коз доить
-овец стричь
-собирать яйца у кур, утки и гусей
-различать по голосам(коровы мычат, утки крякают и т.д.)
-Задача №1
-Нужно реализовать классы животных, не забывая использовать наследование, 
-определить общие методы взаимодействия с животными и дополнить их в дочерних классах, если потребуется.
-
-Задача №2
-Для каждого животного из списка должен существовать экземпляр класса. Каждое животное требуется накормить и подоить/постричь/собрать яйца, если надо.
-
-Задача №3
-У каждого животного должно быть определено имя(self.name) и вес(self.weight).
-
-Необходимо посчитать общий вес всех животных(экземпляров класса);
-Вывести название самого тяжелого животного.
-'''
-
 list_animals = [ 
 	{'anym_type':'goose','anym_name':'Серый'},  
 	{'anym_type':'goose','anym_name':'Белый'},
@@ -102,7 +57,7 @@ class Milking(Animals_with_resource):
 		self.weight = weight
 		Animals_with_resource.__init__(self, self.anim_type, self.weight, self.res_name, self.resource_action_name, self.quantity, self.voice)
 
-class Birds(Animals):
+class Birds(Animals_with_resource):
 	def __init__(self,anim_type, quantity, name, weight ):
 		self.anim_type = anim_type
 		self.res_name = 'яйца'
@@ -138,6 +93,7 @@ class Sheep(Animals_with_resource):
 		self.quantity = quantity
 		self.name = name
 		self.weight = weight
+		self.voice = 'бубубу'
 		Animals_with_resource.__init__(self, self.anim_type, self.weight, self.res_name, self.resource_action_name, self.quantity, self.voice)
 
 class Hen(Birds):
@@ -167,41 +123,42 @@ class Gooses(Birds):
 		self.voice = 'гугугу'
 		Birds.__init__(self, self.anim_type, self.quantity, self.name, self.weight)
 
-'''
-cow1 = Cows('Буренка', 5)
-cow2 = Cows('Рыжуха', 5)
-goat1 = Goats('Рогатая',2)
-sheep1 = Sheep('Козлрог')
 
-print('Pet1 resource', cow1.res_name, 'Pet1 can get', cow1.resource_action_name,'Ресурса осталось', cow1.quantity)
-print('goat1 resource', goat1.res_name, '== can get ==', goat1.resource_action_name,'Ресурса осталось', goat1.quantity)
-print('Pet1 resorce', cow1.quantity, 'Pet1 говорит', cow1.voice)
-print('Goat1 resource', goat1.quantity, 'Goat say', goat1.voice)
-cow1.get_resource(2)
-print('Pet1 resorce', cow1.quantity)
-'''
-#goose1 = Gooses('Bely')
-#print('goose1 resource', goose1.res_name, 'Pet1 can get', goose1.resource_action_name,'Ресурса осталось', goose1.quantity)
-# Создаю список со всеми животными:
+
+# Создаю список всех животных:
 
 pet_obj = []
 i = 0
 for one_pet in list_animals:
 	if one_pet['anym_type'] == 'cow':
-		pet_obj.append(Cows(one_pet[anym_name]))
+		pet_obj.append(Cows(one_pet['anym_name']))
 	elif one_pet['anym_type'] == 'goat':
-		pet_obj.append(Goats(one_pet[anym_name]))
+		pet_obj.append(Goats(one_pet['anym_name']))
 	elif one_pet['anym_type'] == 'sheep':
-		pet_obj.append(Sheep(one_pet[anym_name]))
-	elif one_pet['anym_type'] == 'hen':
-		pet_obj.append(Hen(one_pet[anym_name]))
-#	elif one_pet['anym_type'] == 'goose':
-#		pet_obj.append(Gooses(one_pet[anym_name]))
+		pet_obj.append(Sheep(one_pet['anym_name']))
+	elif one_pet['anym_type'] == 'chicken':
+		pet_obj.append(Hen(one_pet['anym_name']))
+	elif one_pet['anym_type'] == 'goose':
+		pet_obj.append(Gooses(one_pet['anym_name']))
 	elif one_pet['anym_type'] == 'duck':
-		pet_obj.append(Ducks(one_pet[anym_name]))
+		pet_obj.append(Ducks(one_pet['anym_name']))
 	i = i + 1
+sum_weight = 0
+for one_pet in pet_obj:
+	print('Pet name:', one_pet.name, 'pet type:', one_pet.anim_type, 'pet voice:', one_pet.voice)
+	sum_weight = sum_weight + int(one_pet.weight)
+print('Total weight:', sum_weight)
 
-print('Pets:', pet_obj)
-
-
+i = 0
+while i < len(pet_obj):
+	print('====Берем животное номер',i,'====')
+	print('     Это животное типа:', pet_obj[i].anim_type,' его зовут:', pet_obj[i].name, 'у него есть ', pet_obj[i].quantity, 'ресурса', pet_obj[i].res_name)
+	print('     Будем',pet_obj[i].resource_action_name,' ',pet_obj[i].res_name,' у животного')
+	pet_obj[i].get_resource(2)
+	print('     У животного',pet_obj[i].anim_type,' ', pet_obj[i].name, 'осталось ', pet_obj[i].quantity, 'ресурса', pet_obj[i].res_name)
+	print('     Покормим животное')
+	pet_obj[i].set_resource(8)
+	print('     У животного',pet_obj[i].anim_type,' ', pet_obj[i].name, 'осталось ', pet_obj[i].quantity, 'ресурса', pet_obj[i].res_name)
+	print('====Животное обработано====')
+	i = i + 1
 
