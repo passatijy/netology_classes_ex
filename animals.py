@@ -55,108 +55,153 @@ list_animals = [
 	{'anym_type':'duck','anym_name':'Кряква'},
 	]
 
-
 class Animals:
 	''' Main class for all animals.'''
-	def __init__(self,anim_type, name, voice, hungry, legs = 4, weight = 1 ):
+	def __init__(self,anim_type, weight, voice):
 		self.anim_type = anim_type
-		self.name = name
 		self.voice = voice
-		self.hungry = hungry
-		self.legs = legs
 		self.weight = weight
-		self.classname = ''
 
-	def feed(self):
-		self.hungry = False
-		return self.hungry
+	def set_resource(self):
+		pass
+	def get_resource(self):
+		pass
+	def get_weight(self):
+		return self.weight
+	def voice(self):
+		return self.voice
 
 class Animals_with_resource(Animals):
-	def __init__(self,resource_name,resource_action_name,quantity):
-		self.resource_name = resourse_name
+	def __init__(self, anim_type, weight, res_name, resource_action_name, quantity, voice):
+		self.res_name = res_name
 		self.resource_action_name = resource_action_name
 		self.quantity = quantity
-	def get_resource(self, value = 1):
+		self.anim_type = anim_type
+		self.voice = voice
+		Animals.__init__(self, anim_type, weight, voice)
+	def set_resource(self, value):
+		if value > 0:
+			self.quantity = self.quantity + value
+		else :
+			print('malo edy')
+		return self.quantity
+	def get_resource(self, value):
 		if value < self.quantity :
 			self.quantity = self.quantity - value
-		return [self.resource_name, resource_action_name, value]
+		else:
+			self.quantity = 0
+		return [self.res_name, self.resource_action_name, self.quantity]
 
-class Cows(Animals_with_resource):
-	def __init__(self):
+class Milking(Animals_with_resource):
+	def __init__(self,anim_type, quantity, name, weight ):
+		self.anim_type = anim_type
+		self.res_name = 'молоко'
+		self.resource_action_name = 'доить'
+		self.quantity = quantity
+		self.name = name
+		self.weight = weight
+		Animals_with_resource.__init__(self, self.anim_type, self.weight, self.res_name, self.resource_action_name, self.quantity, self.voice)
+
+class Birds(Animals):
+	def __init__(self,anim_type, quantity, name, weight ):
+		self.anim_type = anim_type
+		self.res_name = 'яйца'
+		self.resource_action_name = 'собирать'
+		self.quantity = quantity
+		self.name = name
+		self.weight = weight
+		Animals_with_resource.__init__(self, self.anim_type, self.weight, self.res_name, self.resource_action_name, self.quantity, self.voice)
+
+class Cows(Milking):
+	def __init__(self, name, quantity = 10, weight = 200):
+		self.anim_type = 'cow'
+		self.quantity = quantity
+		self.name = name
+		self.weight = weight
 		self.voice = 'мууу'
-		Animals_with_resource.__init__(self)
-	def voice(self):
-		return self.voice
-	
-	
-class Goats(Animals_with_resource):
-	def __init__(self):
+		Milking.__init__(self, self.anim_type, self.quantity, self.name, self.weight)
+
+class Goats(Milking):
+	def __init__(self, name, quantity = 3, weight = 30):
+		self.anim_type = 'goat'
+		self.quantity = quantity
+		self.name = name
+		self.weight = weight
 		self.voice = 'беее'
-		Animals_with_resource.__init__(self)
-	def voice(self):
-		return self.voice
-	
+		Milking.__init__(self, self.anim_type, self.quantity, self.name, self.weight)
 
+class Sheep(Animals_with_resource):
+	def __init__(self, name, quantity = 2, weight = 20):
+		self.anim_type = 'sheep'
+		self.res_name = 'шерсть'
+		self.resource_action_name = 'стричь'
+		self.quantity = quantity
+		self.name = name
+		self.weight = weight
+		Animals_with_resource.__init__(self, self.anim_type, self.weight, self.res_name, self.resource_action_name, self.quantity, self.voice)
 
+class Hen(Birds):
+	def __init__(self, name, quantity = 5, weight = 2):
+		self.anim_type = 'hen'
+		self.quantity = quantity
+		self.name = name
+		self.weight = weight
+		self.voice = 'кудах'
+		Birds.__init__(self, self.anim_type, self.quantity, self.name, self.weight)
 
+class Ducks(Birds):
+	def __init__(self, name, quantity = 3, weight = 3):
+		self.anim_type = 'duck'
+		self.quantity = quantity
+		self.name = name
+		self.weight = weight
+		self.voice = 'гагага'
+		Birds.__init__(self, self.anim_type, self.quantity, self.name, self.weight)
 
+class Gooses(Birds):
+	def __init__(self, name, quantity = 3, weight = 3):
+		self.anim_type = 'goose'
+		self.quantity = quantity
+		self.name = name
+		self.weight = weight
+		self.voice = 'гугугу'
+		Birds.__init__(self, self.anim_type, self.quantity, self.name, self.weight)
+
+'''
+cow1 = Cows('Буренка', 5)
+cow2 = Cows('Рыжуха', 5)
+goat1 = Goats('Рогатая',2)
+sheep1 = Sheep('Козлрог')
+
+print('Pet1 resource', cow1.res_name, 'Pet1 can get', cow1.resource_action_name,'Ресурса осталось', cow1.quantity)
+print('goat1 resource', goat1.res_name, '== can get ==', goat1.resource_action_name,'Ресурса осталось', goat1.quantity)
+print('Pet1 resorce', cow1.quantity, 'Pet1 говорит', cow1.voice)
+print('Goat1 resource', goat1.quantity, 'Goat say', goat1.voice)
+cow1.get_resource(2)
+print('Pet1 resorce', cow1.quantity)
+'''
+#goose1 = Gooses('Bely')
+#print('goose1 resource', goose1.res_name, 'Pet1 can get', goose1.resource_action_name,'Ресурса осталось', goose1.quantity)
 # Создаю список со всеми животными:
+
 pet_obj = []
 i = 0
 for one_pet in list_animals:
-	i = i + 1
-	pet_obj.append(Animals(one_pet['anym_type'], one_pet['anym_name'],'',True))
-#	print(one_pet)
-#	print('Type: ',one_pet['anym_type'], 'Name: ',one_pet['anym_name'])
-'''
-	if one_pet['anym_type'] == 'goat':
-		pet_obj.append(Animals('goat', one_pet['anym_name'],'',True))
+	if one_pet['anym_type'] == 'cow':
+		pet_obj.append(Cows(one_pet[anym_name]))
+	elif one_pet['anym_type'] == 'goat':
+		pet_obj.append(Goats(one_pet[anym_name]))
+	elif one_pet['anym_type'] == 'sheep':
+		pet_obj.append(Sheep(one_pet[anym_name]))
 	elif one_pet['anym_type'] == 'hen':
-		pet_obj.append(Animals('hen', one_pet['anym_name'],'',True))
-	else: 
-'''
-	
-	#print(pet_obj[i].name,' ',pet_obj[i].weight)
+		pet_obj.append(Hen(one_pet[anym_name]))
+#	elif one_pet['anym_type'] == 'goose':
+#		pet_obj.append(Gooses(one_pet[anym_name]))
+	elif one_pet['anym_type'] == 'duck':
+		pet_obj.append(Ducks(one_pet[anym_name]))
+	i = i + 1
 
-# Вывожу список со всеми животными:
-for other_pet in pet_obj:
-	#принт для отладки:
-	#print(type(other_pet))
-	print('Тип: ', other_pet.anim_type,' Имя: ', other_pet.name,' Вес: ',other_pet.weight, ' Голодное: ', other_pet.hungry, ' Голос: ',other_pet.voice)
-
-print("Животное по имени ", pet_obj[0].name," голодное?", pet_obj[0].hungry)
-pet_obj[0].feed
-print("Животное по имени ", pet_obj[0].name," голодное?", pet_obj[0].hungry)
-
-
-
-'''
-
-	
-class Sheep(Animals):
-	classname = 'sheep'
-	pass
-
-class Birds(Animals):
-	eggs = 5
-	resource_name = 'яйцо'
-	def get_egg(self, value):
-		if value < self.eggs :
-			self.eggs = self.eggs - value
-		return self.eggs, value
-
-class Hen(Birds):
-	classname = 'hen'
-	pass
-
-class Ducks(Birds):
-	classname = 'duck'
-	voice = 'крякря'
-
-class Gooses(Birds):
-	classname = 'goose'
-	pass
-'''
+print('Pets:', pet_obj)
 
 
 
